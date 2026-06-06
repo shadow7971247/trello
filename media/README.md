@@ -18,7 +18,6 @@
 
 | Файл | Описание |
 |------|----------|
-| `allure_*_report_local.png` | Сводка Allure после локального прогона API / UI / Mobile. |
 | `ui_smoke_local.mp4` | UI smoke (4 теста), локальный Chrome headless. |
 | `ui_full_local.mp4` | Полный UI suite (11 тестов), локальный Chrome headless. |
 | `mobile_emulator_run.gif` | Запись локального mobile-прогона на Android-эмуляторе (Appium). |

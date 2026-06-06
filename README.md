@@ -222,14 +222,6 @@ Freestyle job **[shadow7971247_trello_v2](https://jenkins.autotests.cloud/view/p
 
 ## Скриншоты и записи
 
-### Allure — локальные прогоны
-
-<img src="media/allure_api_report_local.png" width="900" alt="Allure API local">
-
-<img src="media/allure_ui_report_local.png" width="900" alt="Allure UI local">
-
-<img src="media/allure_mobile_report_local.png" width="900" alt="Allure Mobile local">
-
 ### UI — публичные доски
 
 <img src="media/ui_public_board_open.png" width="900" alt="Публичная доска">
