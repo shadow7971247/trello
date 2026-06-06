@@ -2,37 +2,60 @@
 
 **Автор:** [shadow7971247](https://github.com/shadow7971247)  
 **Объект:** [Trello](https://trello.com) — веб и Android-приложение Atlassian  
-**Allure TestOps:** [проект #592](https://allure.autotests.cloud) · `shadow7971247_trello`
+**Allure TestOps:** [проект #592](https://allure.autotests.cloud) · job Jenkins `shadow7971247_trello_v2`
 
-Экосистема **API-first**: API готовит данные, UI проверяет публичный веб, mobile — native-приложение на эмуляторе и в BrowserStack.
+Проект демонстрирует **API-first** автоматизацию: REST API готовит и проверяет данные, UI-тесты работают с публичными досками без логина в браузере, mobile-тесты — через Appium на эмуляторе и в BrowserStack App Automate.
 
 ---
 
-## :link: Репозитории
+## Репозитории
 
-| Репозиторий | Назначение | Тестов |
-|-------------|------------|--------|
+| Репозиторий | Назначение | Автотестов |
+|-------------|------------|------------|
 | **[trello](https://github.com/shadow7971247/trello)** (этот) | README, docs, media, CI | — |
 | **[trello_api](https://github.com/shadow7971247/trello_api)** | REST CRUD, auth, data provider | 25 |
 | **[trello_ui](https://github.com/shadow7971247/trello_ui)** | Read-only веб на публичных URL | 11 |
-| **[trello_mobile](https://github.com/shadow7971247/trello_mobile)** | Appium: эмулятор + BrowserStack | 8 |
+| **[trello_mobile](https://github.com/shadow7971247/trello_mobile)** | Appium: эмулятор + BrowserStack | 10 |
 
-**Порядок прогона:** API → UI → Mobile.
+**Итого в кодовой базе: 46 автотестов.**  
+**В CI (набор `all`): 21 тест** — API smoke (7) + UI (11) + Mobile cloud smoke (3).
+
+**Порядок прогона в Jenkins:** API → UI → Mobile.
 
 ---
 
-## :open_file_folder: Структура рабочей папки
+## Архитектура
 
-Локально все четыре репозитория лежат **рядом** в одной директории:
+```mermaid
+flowchart LR
+  subgraph ci [Jenkins shadow7971247_trello_v2]
+    A[API smoke] --> B[UI public boards]
+    B --> C[Mobile BrowserStack smoke]
+  end
+  A --> D[(Trello REST API)]
+  B --> E[Selenoid Chrome]
+  C --> F[BrowserStack APK]
+  ci --> G[Allure TestOps #592]
+```
+
+| Слой | Инструмент | Где запускается |
+|------|------------|-----------------|
+| API | `requests`, Pydantic | Jenkins / локально |
+| UI | Selenium, Selene | Jenkins (Selenoid) / локально (Chrome) |
+| Mobile | Appium, UiAutomator2 | Jenkins (BrowserStack) / локально (эмулятор) |
+
+---
+
+## Структура рабочей папки
 
 ```
-trello/                 ← вы здесь: документация, скрины, Jenkins
+trello/                 ← документация, media, Jenkins
 trello_api/             ← отдельный git-репозиторий
 trello_ui/              ← отдельный git-репозиторий
 trello_mobile/          ← отдельный git-репозиторий
 ```
 
-Клонирование с нуля:
+Клонирование:
 
 ```powershell
 .\scripts\clone_workspace.ps1 -Target C:\Projects
@@ -40,68 +63,45 @@ trello_mobile/          ← отдельный git-репозиторий
 
 ---
 
-## :page_facing_up: Содержание
+## Содержание
 
 1. [Автотесты](#автотесты)
 2. [Ручные кейсы](#ручные-кейсы)
 3. [Технологии](#технологии)
-4. [Установка](#установка)
-5. [Запуск](#запуск)
-6. [CI и TestOps](#ci-и-testops)
-7. [Скриншоты](#скриншоты)
-8. [Документация](#документация)
+4. [Установка и запуск](#установка-и-запуск)
+5. [CI: Jenkins и TestOps](#ci-jenkins-и-testops)
+6. [Скриншоты и записи](#скриншоты-и-записи)
+7. [Документация](#документация)
 
 ---
 
-## :test_tube: Автотесты
-
-**Итого: 44 автотеста.**
+## Автотесты
 
 ### API — trello_api (25)
 
-- ✅ Текущий пользователь по токену
-- ✅ Невалидный токен
-- ✅ Создание / получение / обновление / удаление доски
-- ✅ Публичная доска
-- ✅ Закрытие доски
-- ✅ Создание доски без имени (негатив)
-- ✅ Создание / получение / переименование списка
-- ✅ Создание / получение / переименование / описание карточки
-- ✅ Перенос карточки между списками
-- ✅ Архивация и удаление карточки
-- ✅ Чеклист и пункт чеклиста
-- ✅ Доски и workspace участника
-- ✅ Провижининг и очистка данных для UI
+Smoke в CI (7): текущий пользователь, невалидный токен, CRUD доски, публичная доска, список, карточка, чек-лист.
+
+Полный набор: CRUD досок / списков / карточек, архивация, негативные кейсы, workspace участника, провижининг данных для UI.
 
 ### UI — trello_ui (11)
 
-- ✅ Открытие публичной доски по URL
-- ✅ Открытие по shortUrl
-- ✅ Заголовок доски во вкладке браузера
-- ✅ Список на доске / несколько списков
-- ✅ Карточка на доске / несколько карточек
-- ✅ Архивная карточка не отображается
-- ✅ Карточка по URL, ASCII-имя, ссылки на несколько карточек
+Публичные доски без авторизации: открытие по URL и shortUrl, списки и карточки, архивная карточка скрыта, ссылки `/c/`, ASCII-имена.
 
-### Mobile — trello_mobile (8)
+### Mobile — trello_mobile (10)
 
-- ✅ Активный package `com.trello`
-- ✅ Экран досок после входа
-- ✅ Deep link на доску из API
-- ✅ Доска из API в списке / открытие
-- ✅ Карточка с API на доске
-- ✅ Переименование карточки (проверка через API)
-- ✅ Удаление карточки (проверка через API)
+**BrowserStack CI (3):** активный package, welcome-экран, повторный `activate_app`.
+
+**Локальный эмулятор (7):** smoke (экран досок, deep link), доска/карточка из API, открытие доски, rename/delete с проверкой через API.
 
 ---
 
-## :clipboard: Ручные кейсы
+## Ручные кейсы
 
-См. [docs/MANUAL_TESTS.md](docs/MANUAL_TESTS.md) — 7 кейсов API / Web / Mobile / E2E, часть покрыта автотестами.
+См. [docs/MANUAL_TESTS.md](docs/MANUAL_TESTS.md) — 7 кейсов API / Web / Mobile / E2E; часть покрыта автотестами, остальное можно завести в TestOps как Manual.
 
 ---
 
-## :hammer_and_wrench: Технологии
+## Технологии
 
 | Python | Selenium | Pytest | Appium | Jenkins |
 |--------|----------|--------|--------|---------|
@@ -113,17 +113,12 @@ trello_mobile/          ← отдельный git-репозиторий
 
 ---
 
-## :wrench: Установка
+## Установка и запуск
 
-1. Клонировать репозитории (см. [clone_workspace.ps1](scripts/clone_workspace.ps1)).
+1. Клонировать репозитории ([clone_workspace.ps1](scripts/clone_workspace.ps1)).
 2. В каждом проекте: `python -m venv .venv`, `pip install -r requirements.txt`.
-3. Создать `trello_ui/.env` по `.env.example` — **API key и token** (для API и UI).
-4. Для mobile: `trello_mobile/.env.local`, учётка Trello (`TRELLO_EMAIL`, `TRELLO_PASSWORD`).
-5. Mobile локально: Appium `:4723`, эмулятор в `adb devices`.
-
----
-
-## :arrow_forward: Запуск
+3. `trello_ui/.env` — `TRELLO_API_KEY`, `TRELLO_API_TOKEN`; для mobile также `TRELLO_EMAIL`, `TRELLO_PASSWORD`.
+4. Mobile локально: Appium `:4723`, эмулятор в `adb devices`, `trello_mobile/.env`.
 
 ```bash
 # API
@@ -133,82 +128,114 @@ cd trello_api && pytest -m smoke --alluredir=allure-results
 cd trello_ui && pytest -m ui --alluredir=allure-results
 
 # Mobile — эмулятор
-cd trello_mobile && pytest -m "mobile and not browserstack" --run-context local --alluredir=allure-results
+cd trello_mobile && pytest -m "mobile and local_only" --run-context local --alluredir=allure-results
 
 # Mobile — BrowserStack
 cd trello_mobile && pytest -m cloud_smoke --run-context browserstack --alluredir=allure-results
 
-# Полный локальный прогон (PowerShell)
+# Полный локальный прогон
 .\scripts\run_local_suite.ps1
 
-# Отчёт
+# Allure локально
 allure serve allure-results
 ```
 
-### Результат локального прогона
+### Результаты локального прогона
 
 | Проект | Маркер | Результат |
 |--------|--------|-----------|
 | trello_api | `smoke` | 7 passed |
 | trello_ui | `ui` | 11 passed |
-| trello_mobile | `mobile`, local | 6 passed |
+| trello_mobile | `local_only` | 7 passed |
 
 ---
 
-## :gear: CI и TestOps
+## CI: Jenkins и TestOps
 
-| Этап | Репозиторий | Команда |
-|------|-------------|---------|
-| API | `trello_api` | `pytest -m smoke --alluredir=allure-results` |
-| UI | `trello_ui` | `pytest -m ui --alluredir=allure-results` |
-| Mobile (облако) | `trello_mobile` | `pytest -m cloud_smoke --run-context browserstack` |
+Freestyle job **`shadow7971247_trello_v2`** (папка `python_students`):
 
-- **Jenkins:** Freestyle ([docs/JENKINS_FREESTYLE.md](docs/JENKINS_FREESTYLE.md)) или Pipeline ([Jenkinsfile](Jenkinsfile)).
-- **TestOps:** `allurectl upload` → проект **#592**.
+| Параметр `test_suite` | Что запускается |
+|----------------------|-----------------|
+| `all` | API smoke + UI + Mobile BrowserStack (21 тест) |
+| `api` | 7 smoke API |
+| `ui` | 11 UI |
+| `mobile` | 3 cloud smoke |
 
-Прогоны трёх Jenkins-заданий (API, UI, Mobile) попадают в TestOps. Цепочка: запуск → suite → тест → шаг → вложение.
+Артефакты: `allure-report.zip`, загрузка в **Allure TestOps #592** через `allurectl`.
+
+Подробнее: [docs/JENKINS_FREESTYLE.md](docs/JENKINS_FREESTYLE.md), [docs/CI.md](docs/CI.md).
+
+### Jenkins
+
+*Выбор набора тестов перед запуском job.*
+
+<img src="media/jenkins_launch_params.jpg" width="900" alt="Jenkins Build with Parameters">
+
+*Успешные сборки, артефакты Allure и тренд прохождения.*
+
+<img src="media/jenkins_dashboard.jpg" width="900" alt="Jenkins dashboard">
+
+### Allure TestOps и Report
+
+*Запуск #16 в TestOps: 21 автотест, все passed.*
+
+<img src="media/testops_launch.jpg" width="900" alt="Allure TestOps launch">
+
+*Обзор отчёта Allure: 21 passed, ~2 мин, тренд по сборкам.*
+
+<img src="media/allure_overview.jpg" width="900" alt="Allure overview">
+
+*Behaviors: REST API Trello, Trello Web, Smoke — feature/story на русском.*
+
+<img src="media/allure_behaviours.jpg" width="900" alt="Allure behaviors">
 
 ---
 
-## :ticket: Скриншоты
+## Скриншоты и записи
 
-### Allure — API, UI, Mobile
+### Allure — локальные прогоны
 
-<img src="media/allure_api_report_local.png" width="1080">
+| API | UI | Mobile |
+|-----|----|--------|
+| <img src="media/allure_api_report_local.png" width="320"> | <img src="media/allure_ui_report_local.png" width="320"> | <img src="media/allure_mobile_report_local.png" width="320"> |
 
-<img src="media/allure_ui_report_local.png" width="1080">
-
-<img src="media/allure_mobile_report_local.png" width="1080">
-
-### UI — видео локального прогона
-
-| Smoke (4 теста) | Полный suite (11 тестов) |
-|-----------------|--------------------------|
-| [ui_smoke_local.mp4](media/ui_smoke_local.mp4) (~8 с) | [ui_full_local.mp4](media/ui_full_local.mp4) (~24 с) |
-
-Повторная запись: `trello_ui\.venv\Scripts\python.exe scripts\capture_ui_video.py` (локальный Chrome headless, без Selenoid/BrowserStack).
+*Сводные отчёты Allure после локального прогона каждого слоя.*
 
 ### UI — публичные доски
 
 | Доска | Список | Карточка |
 |-------|--------|----------|
-| <img src="media/ui_public_board_open.png" width="340"> | <img src="media/ui_public_list.png" width="340"> | <img src="media/ui_public_card_detail.png" width="340"> |
+| <img src="media/ui_public_board_open.png" width="280"> | <img src="media/ui_public_list.png" width="280"> | <img src="media/ui_public_card_detail.png" width="280"> |
 
-### Mobile — эмулятор и сценарии
+*Read-only проверки публичной доски без логина в браузере.*
+
+### UI — видео локального прогона
+
+| Smoke (4 теста) | Полный suite (11 тестов) |
+|-----------------|--------------------------|
+| [ui_smoke_local.mp4](media/ui_smoke_local.mp4) | [ui_full_local.mp4](media/ui_full_local.mp4) |
+
+*Запись шагов UI-тестов (локальный Chrome headless, без BrowserStack).*
+
+Повторная запись: `trello_ui\.venv\Scripts\python.exe scripts\capture_ui_video.py`
+
+### Mobile — эмулятор
+
+*GIF: локальный прогон mobile-тестов на Android-эмуляторе (Appium).*
+
+<img src="media/mobile_emulator_run.gif" width="320" alt="Mobile emulator test run">
 
 | Экран досок | Открытие доски | Deep link |
 |-------------|----------------|-----------|
-| <img src="media/mobile_emulator_boards.png" width="340"> | <img src="media/mobile_board_open.png" width="340"> | <img src="media/mobile_deep_link_board.png" width="340"> |
+| <img src="media/mobile_emulator_boards.png" width="280"> | <img src="media/mobile_board_open.png" width="280"> | <img src="media/mobile_deep_link_board.png" width="280"> |
 
 | Доска в списке | Rename | Delete |
 |----------------|--------|--------|
-| <img src="media/mobile_board_in_list.png" width="340"> | <img src="media/mobile_rename_card.png" width="340"> | <img src="media/mobile_delete_card.png" width="340"> |
-
-> Слоты для скринов Jenkins и TestOps: добавьте `media/jenkins_build.png`, `media/testops_launch.png` перед защитой.
+| <img src="media/mobile_board_in_list.png" width="280"> | <img src="media/mobile_rename_card.png" width="280"> | <img src="media/mobile_delete_card.png" width="280"> |
 
 ---
 
-## :books: Документация
+## Документация
 
 | Файл | Содержание |
 |------|------------|
@@ -216,13 +243,16 @@ allure serve allure-results
 | [docs/JENKINS_FREESTYLE.md](docs/JENKINS_FREESTYLE.md) | Freestyle job по шагам |
 | [docs/MANUAL_TESTS.md](docs/MANUAL_TESTS.md) | Ручные кейсы |
 | [Jenkinsfile](Jenkinsfile) | Pipeline (черновик) |
-| [media/README.md](media/README.md) | Описание скриншотов |
+| [media/README.md](media/README.md) | Каталог медиафайлов |
+
+Ссылки на репозитории тестов: [trello_api](https://github.com/shadow7971247/trello_api) · [trello_ui](https://github.com/shadow7971247/trello_ui) · [trello_mobile](https://github.com/shadow7971247/trello_mobile)
 
 ---
 
-## :white_check_mark: Итоги
+## Итоги
 
-- **44 автотеста**, три независимых репозитория, общий data layer через API.
-- UI стабилен: публичные доски, без логина в браузере.
-- Mobile: эмулятор и BrowserStack, скрины на каждом шаге Allure.
-- CI: Jenkins → Allure TestOps #592.
+- **46 автотестов** в трёх репозиториях, общий data layer через Trello REST API.
+- **CI:** Jenkins → Selenoid (UI) + BrowserStack (mobile smoke) → Allure TestOps #592.
+- **UI:** стабильные read-only сценарии на публичных досках.
+- **Mobile:** полные E2E на эмуляторе; в CI — smoke без Atlassian OAuth.
+- **Allure:** шаги на русском, термины CRUD / UI / API / Smoke без перевода.
