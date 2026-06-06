@@ -5,6 +5,13 @@
 **Allure TestOps:** [проект #592](https://allure.autotests.cloud)  
 **Jenkins:** [shadow7971247_trello_v2](https://jenkins.autotests.cloud/view/python_students/job/shadow7971247_trello_v2/) (папка `python_students`)
 
+<h3>
+<a href="https://github.com/shadow7971247/trello">trello</a> ·
+<a href="https://github.com/shadow7971247/trello_api">trello_api</a> ·
+<a href="https://github.com/shadow7971247/trello_ui">trello_ui</a> ·
+<a href="https://github.com/shadow7971247/trello_mobile">trello_mobile</a>
+</h3>
+
 Проект демонстрирует **API-first** автоматизацию: REST API готовит и проверяет данные, UI-тесты работают с публичными досками без логина в браузере, mobile-тесты — через Appium на эмуляторе и в BrowserStack App Automate.
 
 ---
@@ -73,7 +80,6 @@ trello_mobile/          ← отдельный git-репозиторий
 4. [Установка и запуск](#установка-и-запуск)
 5. [CI: Jenkins и TestOps](#ci-jenkins-и-testops)
 6. [Скриншоты и записи](#скриншоты-и-записи)
-7. [Документация](#документация)
 
 ---
 
@@ -212,39 +218,25 @@ Freestyle job **[shadow7971247_trello_v2](https://jenkins.autotests.cloud/view/p
 
 <img src="media/allure_overview.jpg" width="900" alt="Allure overview">
 
-*Behaviors: REST API Trello, Trello Web, Smoke — feature/story на русском.*
-
-<img src="media/allure_behaviours.jpg" width="900" alt="Allure behaviors">
-
 ---
 
 ## Скриншоты и записи
 
 ### Allure — локальные прогоны
 
-| API | UI | Mobile |
-|-----|----|--------|
-| <img src="media/allure_api_report_local.png" width="320"> | <img src="media/allure_ui_report_local.png" width="320"> | <img src="media/allure_mobile_report_local.png" width="320"> |
+<img src="media/allure_api_report_local.png" width="900" alt="Allure API local">
 
-*Сводные отчёты Allure после локального прогона каждого слоя.*
+<img src="media/allure_ui_report_local.png" width="900" alt="Allure UI local">
+
+<img src="media/allure_mobile_report_local.png" width="900" alt="Allure Mobile local">
 
 ### UI — публичные доски
 
-| Доска | Список | Карточка |
-|-------|--------|----------|
-| <img src="media/ui_public_board_open.png" width="280"> | <img src="media/ui_public_list.png" width="280"> | <img src="media/ui_public_card_detail.png" width="280"> |
+<img src="media/ui_public_board_open.png" width="900" alt="Публичная доска">
 
-*Read-only проверки публичной доски без логина в браузере.*
+<img src="media/ui_public_list.png" width="900" alt="Список на доске">
 
-### UI — видео локального прогона
-
-| Smoke (4 теста) | Полный suite (11 тестов) |
-|-----------------|--------------------------|
-| [ui_smoke_local.mp4](media/ui_smoke_local.mp4) | [ui_full_local.mp4](media/ui_full_local.mp4) |
-
-*Запись шагов UI-тестов (локальный Chrome headless, без BrowserStack).*
-
-Повторная запись: `trello_ui\.venv\Scripts\python.exe scripts\capture_ui_video.py`
+<img src="media/ui_public_card_detail.png" width="900" alt="Карточка">
 
 ### Mobile — эмулятор
 
@@ -259,20 +251,6 @@ Freestyle job **[shadow7971247_trello_v2](https://jenkins.autotests.cloud/view/p
 | Доска в списке | Rename | Delete |
 |----------------|--------|--------|
 | <img src="media/mobile_board_in_list.png" width="280"> | <img src="media/mobile_rename_card.png" width="280"> | <img src="media/mobile_delete_card.png" width="280"> |
-
----
-
-## Документация
-
-| Файл | Содержание |
-|------|------------|
-| [docs/CI.md](docs/CI.md) | Общий план CI |
-| [docs/JENKINS_FREESTYLE.md](docs/JENKINS_FREESTYLE.md) | Freestyle job по шагам |
-| [docs/MANUAL_TESTS.md](docs/MANUAL_TESTS.md) | Ручные кейсы |
-| [Jenkinsfile](Jenkinsfile) | Pipeline (черновик) |
-| [media/README.md](media/README.md) | Каталог медиафайлов |
-
-Ссылки на репозитории тестов: [trello_api](https://github.com/shadow7971247/trello_api) · [trello_ui](https://github.com/shadow7971247/trello_ui) · [trello_mobile](https://github.com/shadow7971247/trello_mobile)
 
 ---
 
