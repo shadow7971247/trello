@@ -8,7 +8,9 @@
 |------|----------|
 | `jenkins_launch_params.jpg` | Jenkins: параметр `test_suite` (all / api / ui / mobile) перед запуском job `shadow7971247_trello_v2`. |
 | `jenkins_dashboard.jpg` | Jenkins: успешные сборки, артефакты Allure и тренд прохождения тестов. |
-| `testops_launch.jpg` | Allure TestOps: запуск #16 — 21 автотест, все passed. |
+| `testops_dashboard.jpg` | Allure TestOps: дашборд `trello_v2` — 24 кейса, 87,5% автоматизации (21 auto + 3 manual). |
+| `testops_test_cases.jpg` | Allure TestOps: список кейсов — робот (auto) и рука (manual #44838–#44840). |
+| `testops_launch.jpg` | Allure TestOps: запуск Jenkins #17 — 21 автотест, все passed. |
 | `allure_overview.jpg` | Allure Report: обзор прогона Jenkins #16 (21 passed, ~2 мин), тренд и Features by Stories. |
 | `allure_behaviours.jpg` | Allure Behaviors: дерево REST API Trello / Trello Web / Smoke с русскими feature и story. |
 

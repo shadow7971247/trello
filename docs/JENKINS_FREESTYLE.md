@@ -1,5 +1,7 @@
 # Jenkins Freestyle: Trello QA + Allure Report + Allure TestOps
 
+Job: **[shadow7971247_trello_v2](https://jenkins.autotests.cloud/view/python_students/job/shadow7971247_trello_v2/)** · [Build with Parameters](https://jenkins.autotests.cloud/view/python_students/job/shadow7971247_trello_v2/build?delay=0sec)
+
 Один Freestyle job на агенте **Windows** (как на вашей машине). Репозитории GitHub: `shadow7971247/trello_api`, `trello_ui`, `trello_mobile`.
 
 Порядок прогона: **API → UI → Mobile** (API-first).
