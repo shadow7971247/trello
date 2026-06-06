@@ -1,0 +1,34 @@
+# IDE и локальная среда
+.idea/
+.cursor/
+.vscode/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Секреты
+.env
+.env.*
+!.env.example
+
+# Allure — генерируемые артефакты (не для GitHub)
+allure-results/
+allure-results-*/
+allure-report/
+allure-report-*/
+media/allure-results*/
+media/allure-report*/
+media/allure-exports/
+media/*.log
+media/.ui_video_frames*/
+
+# Тестовые проекты — отдельные GitHub-репозитории (клонируются рядом)
+trello_api/
+trello_ui/
+trello_mobile/
+
+# Прочее
+*.tmp
+.DS_Store
+Thumbs.db
