@@ -31,9 +31,11 @@
 
 **Порядок прогона в Jenkins:** API → UI → Mobile.
 
+**Паттерны:** Page Object (UI), Screen Object (mobile), API-клиент по сущностям (boards / lists / cards).
+
 ---
 
-## Архитектура
+## Схема CI
 
 ```mermaid
 flowchart LR
@@ -80,6 +82,8 @@ trello_mobile/          ← отдельный git-репозиторий
 4. [Установка и запуск](#установка-и-запуск)
 5. [CI: Jenkins и TestOps](#ci-jenkins-и-testops)
 6. [Скриншоты и записи](#скриншоты-и-записи)
+
+Лицензия: [MIT](LICENSE)
 
 ---
 
