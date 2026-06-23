@@ -22,11 +22,16 @@ media/allure-report*/
 media/allure-exports/
 media/*.log
 media/.ui_video_frames*/
+media/feedback_frames/
+media/semenchenko_frames/
 
 # Тестовые проекты — отдельные GitHub-репозитории (клонируются рядом)
 trello_api/
 trello_ui/
 trello_mobile/
+
+# Резюме — личные контакты (не для GitHub)
+resume/profile.yml
 
 # Прочее
 *.tmp
